@@ -1,17 +1,32 @@
 {
-  "name": "transparent-visualizer-cli",
-  "version": "1.0.0",
-  "description": "A CLI tool to visualize transparent pixels in PNG images by converting them to a vivid color. This helps you ensure that images don't include unexpected pixels.",
-  "main": "dist/index.js",
-  "scripts": {
-    "test": "jest",
-    "build": "tsc",
-    "start": "node dist/index.js"
-  },
-  "author": "macaroni10y",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^22.5.1",
-    "typescript": "^5.5.4"
-  }
+	"name": "transparent-visualizer-cli",
+	"version": "1.0.0",
+	"description": "A CLI tool to visualize transparent pixels in PNG images by converting them to a vivid color. This helps you ensure that images don't include unexpected pixels.",
+	"main": "dist/index.js",
+	"scripts": {
+		"test": "jest",
+		"build": "tsc",
+		"start": "node dist/index.js",
+		"format": "biome check --write ."
+	},
+	"author": "macaroni10y",
+	"license": "MIT",
+	"devDependencies": {
+		"@biomejs/biome": "^1.8.3",
+		"@types/fs-extra": "^11.0.4",
+		"@types/node": "^22.5.1",
+		"@types/react": "^18.3.5",
+		"@types/react-dom": "^18.3.0",
+		"@types/styled-components": "^5.1.34",
+		"typescript": "^5.5.4"
+	},
+	"dependencies": {
+		"fs-extra": "^11.2.0",
+		"glob": "^11.0.0",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"sharp": "^0.33.5",
+		"styled-components": "^6.1.13",
+		"yargs": "^17.7.2"
+	}
 }

@@ -1,11 +1,12 @@
 {
-  "compilerOptions": {
-    "module": "CommonJS",
-    "esModuleInterop": true,
-    "target": "ES2018",
-    "outDir": "./dist",
-    "strict": true,
-    "noImplicitAny": true
-  },
-  "include": ["src/**/*"]
+	"compilerOptions": {
+		"module": "CommonJS",
+		"esModuleInterop": true,
+		"target": "ES2018",
+		"outDir": "./dist",
+		"strict": true,
+		"noImplicitAny": true,
+		"jsx": "react"
+	},
+	"include": ["src/**/*"]
 }
