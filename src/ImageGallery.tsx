@@ -1,10 +1,11 @@
 import React from "react";
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 
 interface Image {
 	title: string;
 	convertedFileName: string;
 	originalFileName: string;
+	hasTransparentPixels: boolean;
 }
 
 interface ImageGalleryProps {
@@ -29,14 +30,23 @@ const Item = styled.div`
 
 const Diff = styled.div`
 	display: flex;
+	flex-direction: row;
 	justify-content: center;
-	flex-wrap: wrap;
 	margin: 20px;
 	padding: 20px;
 	gap: 20px;
 	max-width: 100%;
 	border-radius: 5px;
+	background-color: antiquewhite;
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+`;
+
+const ImgWrapper = styled.div`
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 `;
 
 const StyledImg = styled.img`
@@ -48,16 +58,39 @@ const StyledImg = styled.img`
 `;
 
 const ImageGallery = (props: ImageGalleryProps) => {
+	const {length} = props.images.filter((image) => image.hasTransparentPixels);
 	return (
+
 		<>
-			<h1>Converted PNG Images</h1>
+			<h1>Transparent Visualization Report</h1>
+			<div>
+				{
+					length > 0 ? (
+					<p style={{ color: "red", fontWeight: "bold" }}>
+						There are  {length} images with transparent pixels
+					</p>
+				) : (
+					<p style={{ color: "green" }}>There are no images with transparent pixels</p>
+				)}
+			</div>
 			<Gallery>
 				{props.images.map((image, index) => (
 					<Item key={image.title}>
 						<p>{image.title}</p>
+						{image.hasTransparentPixels ? (
+							<p style={{ color: "red", fontWeight: "bold" }}>has transparent pixels</p>
+						) : (
+							<p style={{color: "green"}}>does not have transparent pixels</p>
+						)}
 						<Diff>
-							<StyledImg src={image.convertedFileName} alt={image.title} />
-							<StyledImg src={image.originalFileName} alt={image.title} />
+							<ImgWrapper>
+								<StyledImg src={image.originalFileName} alt={image.title} />
+								<p>original</p>
+							</ImgWrapper>
+							<ImgWrapper>
+								<StyledImg src={image.convertedFileName} alt={image.title} />
+								<p>alpha channel</p>
+							</ImgWrapper>
 						</Diff>
 					</Item>
 				))}

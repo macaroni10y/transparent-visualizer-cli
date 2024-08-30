@@ -5,12 +5,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 import sharp from "sharp";
 import { ServerStyleSheet } from "styled-components";
 import ImageGallery from "./ImageGallery";
+import { existsTransparentPixels } from "./existsTransparentPixels";
 
 const inputDir = "./input_images";
 const outputDir = "./output";
 const htmlFilePath = "./output/index.html";
-
-const pinkColor = { r: 255, g: 105, b: 180, alpha: 1 };
 
 fs.ensureDirSync(outputDir);
 
@@ -22,27 +21,18 @@ const processImages = async () => {
 	for (const file of pngFiles) {
 		const inputPath = path.join(inputDir, file);
 		const outputPath = path.join(outputDir, file);
-
-		const convertedImage = sharp(inputPath)
-			.flatten({ background: pinkColor })
-			.composite([
-				{
-					input: Buffer.from(
-						`<svg><rect x="0" y="0" width="100%" height="100%" fill="rgba(${pinkColor.r},${pinkColor.g},${pinkColor.b},${pinkColor.alpha})" /></svg>`,
-					),
-					blend: "dest-over",
-				},
-			]);
+		const convertedImage = sharp(inputPath).extractChannel("alpha");
 
 		await convertedImage.toFile(outputPath);
+		const hasTransparentPixels = await existsTransparentPixels(inputPath);
 		await fs.copy(inputPath, path.join(outputDir, "original", file));
-
-		processedImages.push({ name: file, url: file });
+		processedImages.push({ name: file, url: file, hasTransparentPixels });
 	}
 	return processedImages.map((image) => ({
 		title: image.name,
 		convertedFileName: image.url,
 		originalFileName: path.join("original", image.url),
+		hasTransparentPixels: image.hasTransparentPixels,
 	}));
 };
 
@@ -55,5 +45,8 @@ const processImages = async () => {
 	const styleTags = sheet.getStyleTags();
 	const fullHtml = `<!DOCTYPE html><html lang="ja"><doby><head><title>Converted PNG Images</title>${styleTags}</head>${html}</doby></html>`;
 	fs.writeFileSync(htmlFilePath, fullHtml);
-	console.log(`report URL: file://${path.resolve(htmlFilePath)}`);
+	for (const image1 of images.filter((image) => image.hasTransparentPixels)) {
+		console.warn(`Image ${image1.title} has transparent pixels`);
+	}
+	console.info(`report URL: file://${path.resolve(htmlFilePath)}`);
 })();
