@@ -1,0 +1,17 @@
+{
+  "name": "transparent-visualizer-cli",
+  "version": "1.0.0",
+  "description": "A CLI tool to visualize transparent pixels in PNG images by converting them to a vivid color. This helps you ensure that images don't include unexpected pixels.",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "author": "macaroni10y",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^22.5.1",
+    "typescript": "^5.5.4"
+  }
+}
