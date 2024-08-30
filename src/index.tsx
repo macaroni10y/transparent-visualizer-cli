@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import path from "node:path";
 import fs from "fs-extra";
 import React from "react";
@@ -7,7 +9,7 @@ import { ServerStyleSheet } from "styled-components";
 import ImageGallery from "./ImageGallery";
 import { existsTransparentPixels } from "./existsTransparentPixels";
 
-const inputDir = "./input_images";
+const inputDir = "./";
 const outputDir = "./output";
 const htmlFilePath = "./output/index.html";
 
@@ -38,6 +40,10 @@ const processImages = async () => {
 
 (async () => {
 	const images = await processImages();
+	if (images.length === 0) {
+		console.warn("No PNG images found in the current directory");
+		process.exit(1);
+	}
 	const sheet = new ServerStyleSheet();
 	const html = renderToStaticMarkup(
 		sheet.collectStyles(<ImageGallery images={images} />),
@@ -45,8 +51,8 @@ const processImages = async () => {
 	const styleTags = sheet.getStyleTags();
 	const fullHtml = `<!DOCTYPE html><html lang="ja"><doby><head><title>Converted PNG Images</title>${styleTags}</head>${html}</doby></html>`;
 	fs.writeFileSync(htmlFilePath, fullHtml);
-	for (const image1 of images.filter((image) => image.hasTransparentPixels)) {
-		console.warn(`Image ${image1.title} has transparent pixels`);
+	for (const image of images.filter((it) => it.hasTransparentPixels)) {
+		console.warn(`Image ${image.title} has transparent pixels`);
 	}
 	console.info(`report URL: file://${path.resolve(htmlFilePath)}`);
 })();

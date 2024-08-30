@@ -58,19 +58,19 @@ const StyledImg = styled.img`
 `;
 
 const ImageGallery = (props: ImageGalleryProps) => {
-	const {length} = props.images.filter((image) => image.hasTransparentPixels);
+	const { length } = props.images.filter((image) => image.hasTransparentPixels);
 	return (
-
 		<>
 			<h1>Transparent Visualization Report</h1>
 			<div>
-				{
-					length > 0 ? (
+				{length > 0 ? (
 					<p style={{ color: "red", fontWeight: "bold" }}>
-						There are  {length} images with transparent pixels
+						There are {length} images with transparent pixels
 					</p>
 				) : (
-					<p style={{ color: "green" }}>There are no images with transparent pixels</p>
+					<p style={{ color: "green" }}>
+						There are no images with transparent pixels
+					</p>
 				)}
 			</div>
 			<Gallery>
@@ -78,9 +78,11 @@ const ImageGallery = (props: ImageGalleryProps) => {
 					<Item key={image.title}>
 						<p>{image.title}</p>
 						{image.hasTransparentPixels ? (
-							<p style={{ color: "red", fontWeight: "bold" }}>has transparent pixels</p>
+							<p style={{ color: "red", fontWeight: "bold" }}>
+								has transparent pixels
+							</p>
 						) : (
-							<p style={{color: "green"}}>does not have transparent pixels</p>
+							<p style={{ color: "green" }}>does not have transparent pixels</p>
 						)}
 						<Diff>
 							<ImgWrapper>
